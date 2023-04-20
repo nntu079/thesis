@@ -1,0 +1,89 @@
+
+
+
+
+#tokenizer = AutoTokenizer.from_pretrained(config.PATH_BERT)
+#bert      = AutoModel.from_pretrained(config.PATH_BERT)
+#filehandler = open(config.PATH_PICKLE +r'/data_for_create_model','rb')
+#data_for_create_model = pickle.load(filehandler)
+#load model
+#mTRefine= model.MTRefine(bert, data_for_create_model['mer_size'], data_for_create_model['men_size'])
+#mTRefine.load_state_dict(torch.load(r'D:\Dokey Tu\DeployNLP\backend\model\model.pth'))
+#mTRefine = torch.load(r'D:\Dokey Tu\DeployNLP\backend\model\model')
+#mTRefine.eval()
+#x_test=['METHODS', ':', 'Thirty', '-', 'eight', 'patients', 'with', 'IBS', '(', 'constipation', '-', 'predominant', ',', 'n', '=', '17', ';', 'diarrhoea', '-', 'predominant', ',', 'n', '=', '21', ')', 'underwent', '24', '-', 'h', 'ambulatory', 'jejunal', 'manometry', 'before', 'and', 'after', '12', "week's", 'treatment', '[', 'cisapride', ',', '5', 'mg', 'three', 'times', 'daily', '(', 'n', '=', '19', ')', 'or', 'placebo', '(', 'n', '=', '19', ')', ']', '.']
+#real_tokens, input_encode, input_mask, input_segment = tool_for_test.encode(x_test, isTokens=True)
+#output_mer = mTRefine(input_encode,input_mask,input_segment)[0]
+#print(tool_for_test.convert_int_to_tagsmer(output_mer,real_tokens,data_for_create_model['int2tags_mer']))
+#print(data_for_create_model['mer_size'], data_for_create_model['men_size'])
+#print( len(tool_for_test.convert_int_to_tagsmer(output_mer,real_tokens,data_for_create_model['int2tags_mer'])))
+##load model
+#mTRefine= model.MTRefine(bert, data_for_create_model['mer_size'], data_for_create_model['men_size'])
+#PATH=config.PATH_MODEL + r'/model.pth'
+#mTRefine.load_state_dict(torch.load(PATH))
+#print('Load model successfully.')
+#real_tokens, input_encode, input_mask, input_segment = encode(readdata.X_valid_mer[0], isTokens=True)
+#output_mer = mTRefine(input_encode,input_mask,input_segment)[0]
+#print(convert_int_to_tagsmer(output_mer,real_tokens,data_for_create_model['int2tags_mer']))
+#print(readdata.Y_valid_mer[0])
+
+
+    text = tokenizer.tokenize(text)
+    tokens = text
+
+    #mask = preprocessing.getMask(text, tokenizer)
+    text = list([text])
+    input_ids = preprocessing.encode(text,tokenizer)
+
+    x_ids = torch.from_numpy(input_ids[0])
+    mask_ids  = torch.from_numpy(input_ids[1])
+    segment_ids = torch.from_numpy(input_ids[2])
+
+    #print(segment_ids)
+
+    output_mer = mTRefine(x_ids,mask_ids,segment_ids)[0]
+    output_men = mTRefine(x_ids,mask_ids,segment_ids)[1]
+    
+    output_mer = torch.argmax(output_mer,dim=2).tolist()
+    output_men = torch.argmax(output_men,dim=2).tolist()
+
+    #convert output to list and return to frontend
+
+    #print(output_mer)
+    #print(output_men)
+    
+    rs={
+      'mer':output_mer[0],
+      'men':output_men[0],
+      'tokens':tokens
+     }
+    return jsonify(rs)
+    #return "(torch.to_json(output_mer))"
+
+    # need posted data here
+
+
+
+In|cisapride|-|treated  |diarrhoea|-|predominant|patients|the|mean|contraction|amplitude|was|higher
+O |O        |O|O        |B-Disease|O|O          |O       |O  |O   |O          |O        |O  |O
+O |O        |O|O        |B-Disease|O|O          |O       |O  |O   |O          |O        |O  |O
+
+
+Stabilization|of|Kaposi's|sarcoma|occurred|in|the|remaining
+O            |O |D012514 |D012514|O       |O |O  |O        
+O            |O |D012514 |D012514|O       |O |O  |O   
+
+Clinical|,|biochemical|and|haematological|toxicities|were|assessed|. 
+O       |O|O          |O  |O             |O         |O   |O       |O
+O       |O|O          |O  |O             |D064420   |O   |O       |O
+
+
+Amphetamine|-|induced|locomotor|hyperactivity|was|similar|in|all|groups|.
+O          |O|O      |D009069  |D009069      |O  |O      |O |O  |O     |O
+O          |O|O      |D006948  |D006948      |O  |O      |O |O  |O     |O
+
+
+
+The|second|A      |-  |T  |allele|has|a|different|mutation|in|each|patient|.
+O  |O     |D001260|D001260|O     |O  |O|O        |O       |O |O   |O      |O
+O  |O     |D001260|D001260|O     |O  |O|O        |O       |O |O   |O      |O

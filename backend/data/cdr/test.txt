@@ -1,0 +1,56 @@
+Irritable JJ B-NP B-Disease
+bowel NN I-NP I-Disease
+syndrome NN I-NP I-Disease
+is VBZ B-VP O
+a DT B-NP O
+common JJ I-NP O
+cause NN I-NP O
+of IN B-PP O
+abdominal JJ B-NP B-Disease
+pain NN I-NP I-Disease
+and CC I-NP O
+discomfort NN I-NP O
+and CC O O
+may MD B-VP O
+be VB I-VP O
+related VBN I-VP O
+to TO B-PP O
+disordered VBN B-NP B-Disease
+gastrointestinal JJ I-NP I-Disease
+motility NN I-NP I-Disease
+. . O O
+
+
+
+the DT B-NP O
+gastrointestinal JJ I-NP O
+( ( O O
+GI NN B-NP O
+) ) O O
+tolerability NN B-NP O
+, , O O
+safety NN B-NP O
+and CC I-NP O
+efficacy NN I-NP O
+of IN B-PP O
+etoricoxib NN B-NP B-Chemical
+and CC I-NP O
+diclofenac NN I-NP B-Chemical
+in IN B-PP O
+patients NNS B-NP O
+
+
+Fatal JJ B-NP O
+haemopericardium NN I-NP B-Disease
+and CC O O
+gastrointestinal JJ B-NP B-Disease
+haemorrhage NN I-NP I-Disease
+due JJ B-PP O
+to TO B-PP O
+possible JJ B-NP O
+interaction NN I-NP O
+of IN B-PP O
+cranberry NN B-NP O
+juice NN I-NP O
+with IN B-PP O
+warfarin NN B-NP B-Chemical
